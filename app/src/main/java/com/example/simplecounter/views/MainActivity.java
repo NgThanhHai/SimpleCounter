@@ -1,20 +1,21 @@
 package com.example.simplecounter.views;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.simplecounter.R;
 import com.example.simplecounter.databinding.ActivityMainBinding;
-import com.example.simplecounter.models.CounterModels;
 import com.example.simplecounter.viewmodels.CounterViewModels;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +26,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        counterViewModels = ViewModelProviders.of(this).get(CounterViewModels.class);
+
+        // ViewModelProvides.of() is deprecated, use as below instead
+        counterViewModels = new ViewModelProvider(this).get(CounterViewModels.class);
         binding = DataBindingUtil.setContentView(MainActivity.this,R.layout.activity_main);
         binding.setLifecycleOwner(this);
         binding.setCounterViewModels(counterViewModels);
+
+        // Observe the changed of live data to update the UI
+        counterViewModels.getCounter().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable final Integer integer) {
+                // Use binding instead of findViewById in ViewModel
+                binding.txtCounter.setText(integer.toString());
+            }
+        });
 
     }
 
@@ -40,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        counterViewModels.onClickRefresh();
+        counterViewModels.resetCounter();
         return super.onOptionsItemSelected(item);
     }
 }

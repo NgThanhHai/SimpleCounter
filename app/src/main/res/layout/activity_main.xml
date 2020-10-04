@@ -23,10 +23,10 @@
     app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/counter"
+        android:id="@+id/txtCounter"
         android:layout_width="23dp"
         android:layout_height="43dp"
-        android:text="@={CounterViewModels.counter}"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -42,10 +42,11 @@
         android:layout_marginRight="56dp"
         android:layout_marginBottom="40dp"
         android:clickable="true"
-        android:onClick="@{(v) -> CounterViewModels.onClickFab(v)}"
+        android:onClick="@{() -> CounterViewModels.incCount()}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@android:drawable/ic_menu_add"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
